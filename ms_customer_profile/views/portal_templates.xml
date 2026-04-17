@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_customer_profile" name="Customer Super Link">
+        <t t-call="portal.frontend_layout">
+            <div class="container py-4">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="card shadow-sm">
+                            <div class="card-body">
+                                <div class="d-flex align-items-center mb-3">
+                                    <img t-if="partner.avatar_128"
+                                         t-att-src="'/web/image/res.partner/%s/avatar_128' % partner.id"
+                                         class="rounded me-3" style="width:64px;height:64px;object-fit:cover;"/>
+                                    <div>
+                                        <h2 class="mb-0" t-esc="partner.name"/>
+                                        <div class="text-muted">
+                                            <span t-if="partner.account_type == 'reseller'" class="badge text-bg-primary">Reseller</span>
+                                            <span t-if="partner.account_type == 'end_customer'" class="badge text-bg-secondary">End Customer</span>
+                                            <span t-if="partner.parent_id" class="ms-2">
+                                                <t t-esc="partner.parent_id.name"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <h5>Contact</h5>
+                                        <dl class="row">
+                                            <dt class="col-4">Email</dt>
+                                            <dd class="col-8" t-esc="partner.email"/>
+                                            <dt class="col-4" t-if="partner.phone">Phone</dt>
+                                            <dd class="col-8" t-if="partner.phone" t-esc="partner.phone"/>
+                                            <dt class="col-4" t-if="partner.country_id">Country</dt>
+                                            <dd class="col-8" t-if="partner.country_id" t-esc="partner.country_id.name"/>
+                                            <dt class="col-4" t-if="partner.industry_id">Industry</dt>
+                                            <dd class="col-8" t-if="partner.industry_id" t-esc="partner.industry_id.name"/>
+                                        </dl>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h5>Your Personal Workspace</h5>
+                                        <p class="text-muted">
+                                            This is your private portal page. Quotations, production orders and
+                                            sample orders for your account will appear here once they are issued.
+                                        </p>
+                                        <ul class="list-unstyled">
+                                            <li class="text-muted"><i class="fa fa-file-text-o me-2"/>Quotations <span class="badge text-bg-light">coming soon</span></li>
+                                            <li class="text-muted"><i class="fa fa-cubes me-2"/>Production Orders <span class="badge text-bg-light">coming soon</span></li>
+                                            <li class="text-muted"><i class="fa fa-flask me-2"/>Sample Orders <span class="badge text-bg-light">coming soon</span></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_invalid_link" name="Invalid Super Link">
+        <t t-call="portal.frontend_layout">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-md-8 mx-auto text-center">
+                        <h1 class="display-5">Link Not Valid</h1>
+                        <p class="lead">This portal link is invalid or has expired. Please contact your account manager for a fresh link.</p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <template id="portal_blocked" name="Account Blocked">
+        <t t-call="portal.frontend_layout">
+            <div class="container py-5">
+                <div class="row">
+                    <div class="col-md-8 mx-auto text-center">
+                        <h1 class="display-5 text-danger">Account Blocked</h1>
+                        <p class="lead">
+                            Hi <t t-esc="partner.name"/>, your account is currently blocked.
+                            Please contact your account manager for assistance.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

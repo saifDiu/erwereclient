@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_partner_form_inherit_ms_customer" model="ir.ui.view">
+        <field name="name">res.partner.form.ms_customer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//sheet" position="before">
+                <header>
+                    <button name="action_block_customer" type="object" string="Block"
+                            class="btn-danger" invisible="is_blocked"
+                            groups="ms_customer_profile.group_ms_customer_admin"/>
+                    <button name="action_unblock_customer" type="object" string="Unblock"
+                            class="btn-success" invisible="not is_blocked"
+                            groups="ms_customer_profile.group_ms_customer_admin"/>
+                    <button name="action_generate_super_link" type="object" string="Generate Super Link"
+                            class="btn-secondary" invisible="access_token or not id"/>
+                    <button name="action_open_super_link" type="object" string="Open Super Link"
+                            class="btn-secondary" invisible="not id"/>
+                    <button name="action_view_related_contacts" type="object" string="Related Contacts"
+                            class="btn-secondary" invisible="not email_domain or is_free_webmail"/>
+                </header>
+            </xpath>
+
+            <xpath expr="//sheet" position="before">
+                <div class="alert alert-danger" role="alert" invisible="not is_blocked">
+                    <strong>This customer is blocked.</strong>
+                    <span invisible="not block_reason"> Reason: <field name="block_reason" readonly="1" nolabel="1" class="oe_inline"/></span>
+                </div>
+            </xpath>
+
+            <xpath expr="//field[@name='category_id']" position="after">
+                <field name="account_type"/>
+            </xpath>
+
+            <xpath expr="//page[@name='internal_notes']" position="before">
+                <page string="Customer Profile" name="ms_customer_profile">
+                    <group>
+                        <group string="Account">
+                            <field name="is_blocked" readonly="1"/>
+                            <field name="block_reason"
+                                   groups="ms_customer_profile.group_ms_customer_admin"/>
+                        </group>
+                        <group string="Email Intelligence">
+                            <field name="email_domain" readonly="1"/>
+                            <field name="is_free_webmail" readonly="1"/>
+                        </group>
+                    </group>
+                    <group string="Portal">
+                        <field name="portal_super_link" widget="CopyClipboardChar" readonly="1"/>
+                    </group>
+                    <group string="Block History">
+                        <field name="block_history_ids" nolabel="1" readonly="1">
+                            <list create="false" edit="false" delete="false">
+                                <field name="date"/>
+                                <field name="action"/>
+                                <field name="reason"/>
+                                <field name="user_id"/>
+                            </list>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="view_partner_list_inherit_ms_customer" model="ir.ui.view">
+        <field name="name">res.partner.list.ms_customer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='email']" position="after">
+                <field name="account_type" optional="show"/>
+                <field name="email_domain" optional="hide"/>
+                <field name="is_blocked" optional="hide" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_partner_search_inherit_ms_customer" model="ir.ui.view">
+        <field name="name">res.partner.search.ms_customer</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_res_partner_filter"/>
+        <field name="arch" type="xml">
+            <xpath expr="//search" position="inside">
+                <field name="email_domain"/>
+                <separator/>
+                <filter name="filter_end_customer" string="End Customers"
+                        domain="[('account_type','=','end_customer')]"/>
+                <filter name="filter_reseller" string="Resellers"
+                        domain="[('account_type','=','reseller')]"/>
+                <separator/>
+                <filter name="filter_blocked" string="Blocked"
+                        domain="[('is_blocked','=',True)]"/>
+                <filter name="filter_free_webmail" string="Free Webmail"
+                        domain="[('is_free_webmail','=',True)]"/>
+                <separator/>
+                <group>
+                    <filter name="group_account_type" string="Account Type"
+                            context="{'group_by': 'account_type'}"/>
+                    <filter name="group_email_domain" string="Email Domain"
+                            context="{'group_by': 'email_domain'}"/>
+                    <filter name="group_country" string="Country"
+                            context="{'group_by': 'country_id'}"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_ms_customer_partner" model="ir.actions.act_window">
+        <field name="name">Customers</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="domain">[('parent_id','=',False)]</field>
+        <field name="context">{'search_default_filter_end_customer': 0}</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <menuitem id="menu_papachina_root"
+              name="PapaChina"
+              web_icon="ms_customer_profile,static/description/image.png"
+              sequence="-100"/>
+
+    <menuitem id="menu_papachina_customers_root"
+              name="Customers"
+              parent="menu_papachina_root"
+              sequence="10"/>
+
+    <menuitem id="menu_papachina_customers"
+              name="Customers"
+              parent="menu_papachina_customers_root"
+              action="action_ms_customer_partner"
+              sequence="10"/>
+
+    <menuitem id="menu_papachina_enquiries"
+              name="All Enquiries"
+              parent="menu_papachina_customers_root"
+              action="action_enquiry_dashboard"
+              sequence="20"/>
+
+    <menuitem id="menu_papachina_block_history"
+              name="Block History"
+              parent="menu_papachina_customers_root"
+              action="action_customer_block_history"
+              sequence="30"
+              groups="ms_customer_profile.group_ms_customer_admin"/>
+
+    <menuitem id="menu_papachina_config_root"
+              name="Configuration"
+              parent="menu_papachina_root"
+              sequence="90"
+              groups="ms_customer_profile.group_ms_customer_admin"/>
+
+    <menuitem id="menu_papachina_country_email"
+              name="Delivery Email Setup"
+              parent="menu_papachina_config_root"
+              action="action_country_email_config"
+              sequence="10"/>
+
+    <menuitem id="menu_papachina_free_webmail"
+              name="Free Webmail Domains"
+              parent="menu_papachina_config_root"
+              action="action_free_webmail_domain"
+              sequence="20"/>
+
+</odoo>

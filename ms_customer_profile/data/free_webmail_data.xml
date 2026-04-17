@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record id="webmail_gmail" model="ms_customer.free_webmail_domain">
+            <field name="name">gmail.com</field>
+        </record>
+        <record id="webmail_googlemail" model="ms_customer.free_webmail_domain">
+            <field name="name">googlemail.com</field>
+        </record>
+        <record id="webmail_yahoo" model="ms_customer.free_webmail_domain">
+            <field name="name">yahoo.com</field>
+        </record>
+        <record id="webmail_yahoo_co_uk" model="ms_customer.free_webmail_domain">
+            <field name="name">yahoo.co.uk</field>
+        </record>
+        <record id="webmail_ymail" model="ms_customer.free_webmail_domain">
+            <field name="name">ymail.com</field>
+        </record>
+        <record id="webmail_hotmail" model="ms_customer.free_webmail_domain">
+            <field name="name">hotmail.com</field>
+        </record>
+        <record id="webmail_hotmail_co_uk" model="ms_customer.free_webmail_domain">
+            <field name="name">hotmail.co.uk</field>
+        </record>
+        <record id="webmail_outlook" model="ms_customer.free_webmail_domain">
+            <field name="name">outlook.com</field>
+        </record>
+        <record id="webmail_live" model="ms_customer.free_webmail_domain">
+            <field name="name">live.com</field>
+        </record>
+        <record id="webmail_msn" model="ms_customer.free_webmail_domain">
+            <field name="name">msn.com</field>
+        </record>
+        <record id="webmail_aol" model="ms_customer.free_webmail_domain">
+            <field name="name">aol.com</field>
+        </record>
+        <record id="webmail_icloud" model="ms_customer.free_webmail_domain">
+            <field name="name">icloud.com</field>
+        </record>
+        <record id="webmail_me" model="ms_customer.free_webmail_domain">
+            <field name="name">me.com</field>
+        </record>
+        <record id="webmail_mac" model="ms_customer.free_webmail_domain">
+            <field name="name">mac.com</field>
+        </record>
+        <record id="webmail_proton" model="ms_customer.free_webmail_domain">
+            <field name="name">proton.me</field>
+        </record>
+        <record id="webmail_protonmail" model="ms_customer.free_webmail_domain">
+            <field name="name">protonmail.com</field>
+        </record>
+        <record id="webmail_gmx" model="ms_customer.free_webmail_domain">
+            <field name="name">gmx.com</field>
+        </record>
+        <record id="webmail_zoho" model="ms_customer.free_webmail_domain">
+            <field name="name">zoho.com</field>
+        </record>
+        <record id="webmail_mail_ru" model="ms_customer.free_webmail_domain">
+            <field name="name">mail.ru</field>
+        </record>
+        <record id="webmail_yandex" model="ms_customer.free_webmail_domain">
+            <field name="name">yandex.com</field>
+        </record>
+        <record id="webmail_qq" model="ms_customer.free_webmail_domain">
+            <field name="name">qq.com</field>
+        </record>
+        <record id="webmail_163" model="ms_customer.free_webmail_domain">
+            <field name="name">163.com</field>
+        </record>
+        <record id="webmail_126" model="ms_customer.free_webmail_domain">
+            <field name="name">126.com</field>
+        </record>
+        <record id="webmail_sina" model="ms_customer.free_webmail_domain">
+            <field name="name">sina.com</field>
+        </record>
+
+    </data>
+</odoo>

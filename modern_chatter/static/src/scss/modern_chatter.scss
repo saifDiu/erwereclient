@@ -1,0 +1,324 @@
+// ─────────────────────────────────────────────────────────
+//  Modern Chatter — clean UI design
+// ─────────────────────────────────────────────────────────
+
+$sc-surface:      #ffffff;
+$sc-surface-alt:  #f9f8f6;
+$sc-border:       #e8e5e0;
+$sc-border-light: #f0ede8;
+$sc-text-1:       #1a1917;
+$sc-text-2:       #6b6760;
+$sc-text-3:       #a09c97;
+$sc-accent:       #7B52E0;
+$sc-accent-soft:  #ede8ff;
+$sc-accent-mid:   #c4aafd;
+$sc-note-bg:      #fffbf0;
+$sc-note-border:  #f0d980;
+$sc-log-bg:       #f6f6f6;
+$sc-log-text:     #9a9590;
+$sc-star:         #e8a020;
+$sc-chip-bg:      #eeeae6;
+$sc-r:            10px;
+$sc-r-sm:         6px;
+$sc-shadow:       0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+
+.sc-shell {
+    font-family: system-ui, sans-serif;
+    font-size: 13px;
+    color: $sc-text-1;
+    border-top: 1px solid $sc-border;
+    margin-bottom: 8px;
+}
+
+// ── Loading ────────────────────────────────────────────────
+.sc-loading {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; padding: 32px; color: $sc-text-3; font-size: 13px;
+}
+.sc-spinner {
+    width: 18px; height: 18px;
+    border: 2px solid $sc-border; border-top-color: $sc-accent;
+    border-radius: 50%; animation: sc-spin .7s linear infinite;
+}
+@keyframes sc-spin { to { transform: rotate(360deg); } }
+
+// ── Header ─────────────────────────────────────────────────
+.sc-header { padding: 12px 16px 0; }
+
+.sc-label {
+    display: flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; letter-spacing: .08em;
+    text-transform: uppercase; color: $sc-accent; margin-bottom: 10px;
+}
+
+// ── Search (full width) ────────────────────────────────────
+.sc-search-row {
+    margin-bottom: 8px;
+    .sc-search-wrap { display: flex; }
+}
+
+.sc-search-wrap {
+    position: relative; flex: 1;
+    svg { position: absolute; left: 8px; top: 50%; transform: translateY(-50%); color: $sc-text-3; pointer-events: none; }
+}
+
+.sc-search-input {
+    width: 100%; padding: 5px 8px 5px 28px;
+    border: 1px solid $sc-border; border-radius: $sc-r-sm;
+    font-size: 12.5px; color: $sc-text-1; background: $sc-surface-alt; outline: none;
+    transition: border-color .15s;
+    &:focus { border-color: $sc-accent; background: $sc-surface; }
+    &::placeholder { color: $sc-text-3; }
+}
+
+// ── Chips ───────────────────────────────────────────────────
+.sc-chips { display: flex; gap: 5px; flex-wrap: wrap; margin-bottom: 8px; }
+
+.sc-chip {
+    display: inline-flex; align-items: center; gap: 4px;
+    padding: 3px 8px 3px 10px; background: $sc-accent-soft; border: 1px solid $sc-accent-mid;
+    border-radius: 20px; font-size: 11.5px; color: $sc-accent; font-weight: 500;
+    button { background: none; border: none; cursor: pointer; color: $sc-accent-mid; font-size: 14px; line-height: 1; padding: 0; display: flex; transition: color .1s; &:hover { color: $sc-accent; } }
+}
+
+// ── Reactions ───────────────────────────────────────────────
+.sc-reactions {
+    display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;
+}
+
+.sc-reaction-pill {
+    display: inline-flex; align-items: center; gap: 3px;
+    padding: 2px 8px; border-radius: 12px;
+    border: 1px solid $sc-border; background: $sc-surface-alt;
+    font-size: 13px; cursor: pointer; transition: all .12s;
+    &:hover { border-color: $sc-accent; background: $sc-accent-soft; }
+    &.sc-reaction-mine { background: $sc-accent-soft; border-color: $sc-accent-mid; }
+}
+
+.sc-emoji-picker {
+    display: flex; flex-wrap: wrap; gap: 3px; margin-top: 6px;
+    padding: 6px; background: $sc-surface; border: 1px solid $sc-border;
+    border-radius: $sc-r; box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    max-width: 200px;
+}
+
+.sc-emoji-btn {
+    width: 34px; height: 34px; border-radius: 6px; border: none;
+    background: none; font-size: 18px; cursor: pointer; transition: background .1s;
+    display: flex; align-items: center; justify-content: center;
+    &:hover { background: $sc-chip-bg; }
+}
+
+// ── Message list ────────────────────────────────────────────
+.sc-messages {
+    padding: 0 16px 16px; display: flex; flex-direction: column; gap: 8px;
+    max-height: 680px; overflow-y: auto;
+    &::-webkit-scrollbar { width: 4px; }
+    &::-webkit-scrollbar-track { background: transparent; }
+    &::-webkit-scrollbar-thumb { background: $sc-border; border-radius: 2px; }
+}
+
+// ── Empty ───────────────────────────────────────────────────
+.sc-empty {
+    text-align: center; padding: 40px 20px; color: $sc-text-3;
+    svg { margin: 0 auto 10px; display: block; opacity: .4; }
+    p { font-size: 13px; }
+}
+
+// ── Message card ────────────────────────────────────────────
+.sc-msg-card {
+    border-radius: $sc-r; border: 1px solid $sc-border;
+    padding: 12px 13px; background: $sc-surface; box-shadow: $sc-shadow;
+    position: relative; transition: box-shadow .15s;
+    &:hover { box-shadow: 0 3px 10px rgba(0,0,0,.09); .sc-msg-actions { opacity: 1; } }
+    &.sc-starred { border-left: 3px solid $sc-star; }
+    &.sc-log {
+        .sc-msg-body { font-size: 12px; color: $sc-log-text; }
+    }
+}
+
+// ── Card head ───────────────────────────────────────────────
+.sc-msg-head { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 7px; }
+
+.sc-avatar {
+    width: 28px; height: 28px; border-radius: 50%; font-size: 11px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0; color: #fff;
+}
+
+.sc-avatar-img {
+    width: 28px; height: 28px; border-radius: 50%; object-fit: cover; flex-shrink: 0;
+    background: $sc-chip-bg;
+}
+
+.sc-msg-meta { flex: 1; min-width: 0; }
+
+.sc-msg-from {
+    font-size: 13px; font-weight: 600; color: $sc-text-1;
+    display: flex; align-items: center; gap: 5px;
+}
+
+.sc-type-tag {
+    font-size: 10px; font-weight: 600; letter-spacing: .06em;
+    text-transform: uppercase; padding: 1px 6px; border-radius: 4px;
+    &.email { background: #e8f2fb; color: #2d6fa8; }
+    &.note  { background: #fef5d0; color: #8a6800; }
+    &.log   { background: $sc-chip-bg; color: $sc-text-3; }
+}
+
+.sc-msg-sub { font-size: 11.5px; color: $sc-text-3; margin-top: 1px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sc-msg-time { font-size: 11px; color: $sc-text-3; white-space: nowrap; }
+
+// ── Body ────────────────────────────────────────────────────
+.sc-msg-body {
+    font-size: 13px; line-height: 1.55; color: $sc-text-1;
+    overflow-x: auto;
+    img { max-width: none; }
+    table { min-width: max-content; }
+}
+
+// Tracking value display (field: old → new)
+.sc-track-field { font-weight: 600; color: $sc-text-2; }
+.sc-track-old   { color: $sc-text-3; }
+.sc-track-new   { color: $sc-text-1; font-weight: 500; }
+
+.sc-truncated {
+    display: -webkit-box; -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.sc-show-more {
+    background: none; border: none; cursor: pointer;
+    font-size: 12px; color: $sc-accent; font-weight: 500;
+    padding: 0; margin-top: 4px; display: block;
+    &:hover { text-decoration: underline; }
+}
+
+mark.sc-hl { background: #fff176; color: inherit; border-radius: 2px; padding: 0 1px; }
+
+// Link-scroll highlight
+@keyframes sc-link-flash {
+    0%, 60% { background-color: #e8e0ff; }
+    100%     { background-color: transparent; }
+}
+.sc-link-highlight {
+    animation: sc-link-flash 2.5s ease-out forwards;
+    border-radius: $sc-r;
+}
+
+// ── Attachments ─────────────────────────────────────────────
+.sc-attachments { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 9px; }
+
+.sc-attach-chip {
+    display: inline-flex; align-items: center; gap: 0;
+    background: var(--sc-surface-alt, #f9f8f6); border: 1px solid var(--sc-border, #e8e5e0);
+    border-radius: 6px; overflow: hidden;
+    &:hover { border-color: #7B52E0; }
+}
+
+.sc-attach-dl {
+    display: flex; align-items: center; gap: 6px; padding: 5px 8px;
+    color: #6b6760; text-decoration: none; font-size: 12px;
+    &:hover { color: #7B52E0; }
+}
+
+.sc-file-icon {
+    width: 20px; height: 20px; border-radius: 4px; display: flex; align-items: center;
+    justify-content: center; font-size: 9px; font-weight: 700; flex-shrink: 0;
+    &.pdf  { background: #fde8e8; color: #c0392b; }
+    &.xls, &.xlsx { background: #e8f5e9; color: #2e7d32; }
+    &.png, &.jpg, &.jpeg { background: #e3f2fd; color: #1565c0; }
+    &.doc, &.docx { background: #e8eaf6; color: #283593; }
+    &.ics { background: #fff3e0; color: #e65100; }
+    &.file { background: $sc-chip-bg; color: $sc-text-3; }
+}
+
+.sc-attach-name { font-weight: 500; max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.sc-attach-size { color: $sc-text-3; font-size: 11px; }
+
+.sc-att-del {
+    background: none; border: none; border-left: 1px solid #e8e5e0;
+    padding: 5px 7px; cursor: pointer; color: #a09c97; font-size: 14px; line-height: 1;
+    &:hover { background: #fde8e8; color: #c0392b; }
+}
+
+// ── Actions — smooth grow on hover ─────────────────────────
+.sc-msg-actions {
+    display: flex; align-items: center; gap: 3px;
+    overflow: hidden; max-height: 0;
+    opacity: 0; margin-top: 0; padding-top: 0;
+    border-top: 1px solid transparent;
+    transition: max-height .2s ease, opacity .15s, margin-top .2s, padding-top .2s, border-color .2s;
+}
+.sc-msg-card:hover .sc-msg-actions {
+    max-height: 36px; opacity: 1;
+    margin-top: 8px; padding-top: 8px;
+    border-top-color: $sc-border-light;
+}
+
+.sc-action-btn {
+    display: flex; align-items: center; gap: 4px; padding: 4px 8px;
+    border: none; border-radius: $sc-r-sm; background: none;
+    font-size: 11.5px; font-weight: 500; color: $sc-text-3; cursor: pointer; transition: all .12s;
+    &:hover { background: $sc-chip-bg; color: $sc-text-2; }
+}
+
+// ── Date separator ───────────────────────────────────────────
+.sc-date-sep {
+    display: flex; align-items: center; gap: 8px; padding: 4px 0;
+    font-size: 10.5px; font-weight: 600; color: $sc-text-3;
+    text-transform: uppercase; letter-spacing: .07em;
+    &::before, &::after { content: ''; flex: 1; height: 1px; background: $sc-border-light; }
+}
+
+// ── Log group ───────────────────────────────────────────────
+.sc-log-group {
+    display: flex; align-items: center; gap: 8px; padding: 7px 13px;
+    background: $sc-log-bg; border-radius: $sc-r-sm; cursor: pointer;
+    border: 1px dashed $sc-border; transition: background .12s;
+    &:hover { background: #eeeeee; }
+}
+
+.sc-log-group-text { font-size: 12px; color: $sc-log-text; font-weight: 500; }
+.sc-log-group-line { flex: 1; height: 1px; background: $sc-border; }
+.sc-log-chevron { font-size: 11px; color: $sc-text-3; transition: transform .2s; &.expanded { transform: rotate(180deg); } }
+.sc-log-items { display: flex; flex-direction: column; gap: 4px; margin-top: 4px; }
+
+// ── Edit textarea ────────────────────────────────────────────
+.sc-edit-ta {
+    width: 100%; min-height: 72px; padding: 8px; margin-top: 4px;
+    border: 1px solid #c4aafd; border-radius: 6px;
+    font-family: 'DM Sans', system-ui, sans-serif; font-size: 13px;
+    line-height: 1.5; color: #1a1917; resize: vertical; outline: none; background: white;
+    &:focus { border-color: #7B52E0; }
+}
+.sc-edit-row { display: flex; gap: 6px; margin-top: 6px; }
+.sc-save-btn {
+    padding: 5px 14px; background: #7B52E0; color: white; border: none;
+    border-radius: 6px; font-size: 12.5px; font-weight: 500; cursor: pointer;
+    &:hover { background: #7a4fe0; }
+}
+.sc-cancel-btn {
+    padding: 5px 14px; background: none; color: #6b6760; border: 1px solid #e8e5e0;
+    border-radius: 6px; font-size: 12.5px; cursor: pointer;
+    &:hover { border-color: #6b6760; }
+}
+
+// ── Danger action button ─────────────────────────────────────
+.sc-btn-danger:hover { color: #c0392b !important; background: #fde8e8 !important; }
+.sc-star-on { color: $sc-star; }
+
+// ── Force-hide native message list when SC is present ────────
+.o-mail-ChatterContainer .o-mail-Thread,
+.o-mail-Chatter .o-mail-Thread {
+    display: none !important;
+}
+
+// Attach button in edit mode
+.sc-add-att-btn {
+    display: inline-flex; align-items: center; gap: 5px; padding: 5px 10px;
+    border: 1px solid $sc-border; border-radius: $sc-r-sm; cursor: pointer;
+    font-size: 12px; font-weight: 500; color: $sc-text-2; background: $sc-surface-alt; margin-left: auto;
+    transition: all .12s;
+    &:hover { border-color: $sc-accent; color: $sc-accent; background: $sc-accent-soft; }
+}
+.sc-file-input { display: none; }

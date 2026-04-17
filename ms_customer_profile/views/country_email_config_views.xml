@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_country_email_config_list" model="ir.ui.view">
+        <field name="name">ms_customer.country_email_config.list</field>
+        <field name="model">ms_customer.country_email_config</field>
+        <field name="arch" type="xml">
+            <list string="Delivery Email Setup" editable="bottom">
+                <field name="country_id"/>
+                <field name="mailbox_email"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="notes" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_country_email_config_form" model="ir.ui.view">
+        <field name="name">ms_customer.country_email_config.form</field>
+        <field name="model">ms_customer.country_email_config</field>
+        <field name="arch" type="xml">
+            <form string="Country Delivery Email">
+                <sheet>
+                    <group>
+                        <field name="country_id"/>
+                        <field name="mailbox_email"/>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="active"/>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_country_email_config_search" model="ir.ui.view">
+        <field name="name">ms_customer.country_email_config.search</field>
+        <field name="model">ms_customer.country_email_config</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="country_id"/>
+                <field name="mailbox_email"/>
+                <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_country_email_config" model="ir.actions.act_window">
+        <field name="name">Delivery Email Setup</field>
+        <field name="res_model">ms_customer.country_email_config</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Configure a delivery mailbox per country</p>
+            <p>For each country, set the mailbox that receives enquiry notifications and is used as the country-tagged sender (e.g. <code>uk@papachina.com</code>).</p>
+        </field>
+    </record>
+
+</odoo>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_free_webmail_list" model="ir.ui.view">
+        <field name="name">ms_customer.free_webmail.list</field>
+        <field name="model">ms_customer.free_webmail_domain</field>
+        <field name="arch" type="xml">
+            <list string="Free Webmail Domains" editable="bottom">
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_free_webmail_search" model="ir.ui.view">
+        <field name="name">ms_customer.free_webmail.search</field>
+        <field name="model">ms_customer.free_webmail_domain</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="archived" string="Archived" domain="[('active','=',False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_free_webmail_domain" model="ir.actions.act_window">
+        <field name="name">Free Webmail Domains</field>
+        <field name="res_model">ms_customer.free_webmail_domain</field>
+        <field name="view_mode">list</field>
+    </record>
+
+</odoo>

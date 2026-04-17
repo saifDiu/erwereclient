@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+<!--
+    Inherit the native mail.Thread template.
+    We inject our Modern Chatter panel BEFORE the native message list,
+    then hide the native list via scoped CSS (only inside .o-mail-ChatterContainer).
+    The sc-shell is guarded by scActive — it does NOT render in Discuss channels.
+-->
+<t t-name="mail.Thread" t-inherit="mail.Thread" t-inherit-mode="extension">
+
+    <xpath expr="//div[hasclass('o-mail-Thread')]" position="before">
+
+        <!-- scActive = false in Discuss, true in record chatters -->
+        <div class="sc-shell" t-if="scActive">
+
+            <!-- Loading spinner -->
+            <t t-if="sc.loading">
+                <div class="sc-loading">
+                    <div class="sc-spinner"/>
+                    <span>Loading…</span>
+                </div>
+            </t>
+
+            <t t-else="">
+
+                <!-- ── HEADER ── -->
+                <div class="sc-header">
+
+                    <div class="sc-label">
+                        <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor">
+                            <path d="M2 3a1 1 0 011-1h10a1 1 0 011 1v7a1 1 0 01-1 1H9l-3 3v-3H3a1 1 0 01-1-1V3z"/>
+                        </svg>
+                        Modern Chatter
+                    </div>
+
+                    <!-- Search (full width) -->
+                    <div class="sc-search-row">
+                        <div class="sc-search-wrap">
+                            <svg width="13" height="13" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="8.5" cy="8.5" r="5.5"/><path d="m13.5 13.5 3 3"/>
+                            </svg>
+                            <input
+                                type="text"
+                                class="sc-search-input"
+                                placeholder="Search messages…"
+                                t-on-input="scSetSearch"
+                                t-att-value="sc.searchQuery"
+                            />
+                        </div>
+                    </div>
+
+                    <!-- Active chips -->
+                    <t t-if="scChipEntries.length">
+                        <div class="sc-chips">
+                            <t t-foreach="scChipEntries" t-as="chip" t-key="chip[0]">
+                                <div class="sc-chip">
+                                    <t t-esc="chip[1]"/>
+                                    <button t-on-click="() => this.scRemoveChip(chip[0])">×</button>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+
+                </div>
+
+                <!-- ── MESSAGE LIST ── -->
+                <div class="sc-messages">
+
+                    <!-- Empty state -->
+                    <t t-if="scFiltered.length === 0">
+                        <div class="sc-empty">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                                <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
+                            </svg>
+                            <p>No messages match your filters</p>
+                        </div>
+                    </t>
+
+                    <!-- Groups -->
+                    <t t-foreach="scGrouped" t-as="group" t-key="group.kind === 'loggroup' ? group.key : group.kind === 'datesep' ? ('sep_' + group.label) : group.msg.id">
+
+                        <!-- Date separator -->
+                        <t t-if="group.kind === 'datesep'">
+                            <div class="sc-date-sep"><span t-esc="group.label"/></div>
+                        </t>
+
+                        <!-- Log group (3+ consecutive system messages) -->
+                        <t t-elif="group.kind === 'loggroup'">
+                            <div class="sc-log-group" t-on-click="() => this.scToggleLogGroup(group.key)">
+                                <span class="sc-log-group-text"><t t-esc="group.items.length"/> system updates</span>
+                                <span class="sc-log-group-line"/>
+                                <span class="sc-log-chevron" t-att-class="{ expanded: sc.logGroupOpen[group.key] }">▾</span>
+                            </div>
+                            <t t-if="sc.logGroupOpen[group.key]">
+                                <div class="sc-log-items">
+                                    <t t-foreach="group.items" t-as="lm" t-key="lm.id">
+                                        <t t-call="modern_chatter.MsgCard">
+                                            <t t-set="_m" t-value="lm"/>
+                                        </t>
+                                    </t>
+                                </div>
+                            </t>
+                        </t>
+
+                        <!-- Single message -->
+                        <t t-elif="group.kind === 'msg'">
+                            <t t-call="modern_chatter.MsgCard">
+                                <t t-set="_m" t-value="group.msg"/>
+                            </t>
+                        </t>
+
+                    </t>
+
+                </div>
+            </t>
+
+        </div>
+
+    </xpath>
+
+</t>
+
+
+<!-- ══════════════════════════════════════════════════════════
+     Message Card sub-template
+     ══════════════════════════════════════════════════════════ -->
+<t t-name="modern_chatter.MsgCard">
+    <div class="sc-msg-card"
+        t-att-id="'sc-msg-' + _m.id"
+        t-att-class="{
+            'sc-email':   _m.type === 'email',
+            'sc-note':    _m.type === 'note',
+            'sc-log':     _m.type === 'log',
+            'sc-starred': sc.msgUi[_m.id] and sc.msgUi[_m.id].starred,
+        }"
+    >
+        <!-- Header -->
+        <div class="sc-msg-head">
+            <!-- Avatar: real partner image for email/note, initials for log -->
+            <t t-if="_m.avatarPartnerId">
+                <img class="sc-avatar sc-avatar-img"
+                    t-attf-src="/web/image/res.partner/#{_m.avatarPartnerId}/avatar_128"
+                    t-att-alt="_m.initials"
+                />
+            </t>
+            <t t-else="">
+                <div class="sc-avatar" t-att-style="'background:' + _m.avatarColor">
+                    <t t-esc="_m.type === 'log' ? '⚙' : _m.initials"/>
+                </div>
+            </t>
+
+            <div class="sc-msg-meta">
+                <div class="sc-msg-from">
+                    <span t-esc="_m.author"/>
+                    <span class="sc-type-tag" t-att-class="_m.type">
+                        <t t-esc="_m.type === 'email' ? 'Email' : _m.type === 'note' ? 'Note' : 'System'"/>
+                    </span>
+                </div>
+                <t t-if="_m.subject">
+                    <div class="sc-msg-sub" t-esc="_m.subject"/>
+                </t>
+            </div>
+            <span class="sc-msg-time" t-esc="_m.dateLabel"/>
+            <t t-if="sc.msgUi[_m.id] and sc.msgUi[_m.id].starred">
+                <svg width="12" height="12" viewBox="0 0 20 20" fill="#e8a020" style="margin-left:auto;flex-shrink:0">
+                    <polygon points="10,1 12.6,7.2 19.5,7.6 14.2,12 15.8,18.8 10,15.4 4.2,18.8 5.8,12 0.5,7.6 7.4,7.2"/>
+                </svg>
+            </t>
+        </div>
+
+        <!-- Body -->
+        <t t-if="sc.msgUi[_m.id] and sc.msgUi[_m.id].editing">
+            <textarea class="sc-edit-ta" t-on-input="(ev) => this.scEditInput(ev, _m.id)"><t t-esc="sc.msgUi[_m.id].editText"/></textarea>
+            <div class="sc-edit-row">
+                <button class="sc-save-btn" t-on-click="() => this.scSaveEdit(_m.id)">Save</button>
+                <button class="sc-cancel-btn" t-on-click="() => this.scCancelEdit(_m.id)">Cancel</button>
+                <label class="sc-add-att-btn" title="Add attachment">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>
+                    </svg>
+                    Attach
+                    <input type="file" class="sc-file-input" multiple="multiple" t-on-change="(ev) => this.scAddAttachments(ev, _m.id)"/>
+                </label>
+            </div>
+        </t>
+        <t t-else="">
+            <div class="sc-msg-body"
+                t-att-class="{ 'sc-truncated': scIsLong(_m) and !(sc.msgUi[_m.id] and sc.msgUi[_m.id].expanded) }"
+                t-out="scHighlight(_m.bodyHtml)"/>
+            <t t-if="scIsLong(_m)">
+                <button class="sc-show-more" t-on-click="() => this.scToggleExpand(_m.id)">
+                    <t t-esc="sc.msgUi[_m.id] and sc.msgUi[_m.id].expanded ? 'Show less ↑' : 'Show more ↓'"/>
+                </button>
+            </t>
+        </t>
+
+        <!-- Reactions display -->
+        <t t-if="sc.reactions[_m.id]">
+            <div class="sc-reactions">
+                <t t-foreach="Object.entries(sc.reactions[_m.id] || {})" t-as="re" t-key="re[0]">
+                    <t t-if="re[1].count > 0">
+                        <button class="sc-reaction-pill"
+                            t-att-class="{ 'sc-reaction-mine': re[1].myReacted }"
+                            t-on-click="() => this.scToggleReaction(_m.id, re[0])">
+                            <t t-esc="re[0]"/> <t t-esc="re[1].count"/>
+                        </button>
+                    </t>
+                </t>
+            </div>
+        </t>
+
+
+        <!-- Attachments -->
+        <t t-if="_m.attachments and _m.attachments.length">
+            <div class="sc-attachments">
+                <t t-foreach="_m.attachments" t-as="att" t-key="att.id">
+                    <div class="sc-attach-chip">
+                        <a t-att-href="'/web/content/' + att.id + '?download=true'" target="_blank" class="sc-attach-dl">
+                            <span class="sc-file-icon" t-att-class="scFileExt(att.name).toLowerCase()">
+                                <t t-esc="scFileExt(att.name)"/>
+                            </span>
+                            <span class="sc-attach-name" t-esc="att.name"/>
+                            <span class="sc-attach-size" t-esc="scFileSize(att.file_size)"/>
+                        </a>
+                        <!-- Attachment delete only visible in edit mode -->
+                        <t t-if="sc.msgUi[_m.id] and sc.msgUi[_m.id].editing">
+                            <button class="sc-att-del" t-on-click="() => this.scDeleteAttachment(_m.id, att.id)" title="Remove">×</button>
+                        </t>
+                    </div>
+                </t>
+            </div>
+        </t>
+
+        <!-- Actions (visible on hover) -->
+        <div class="sc-msg-actions">
+            <button class="sc-action-btn" t-att-class="{ 'sc-star-on': sc.msgUi[_m.id] and sc.msgUi[_m.id].starred }" t-on-click="() => this.scToggleStar(_m.id)">
+                <t t-esc="sc.msgUi[_m.id] and sc.msgUi[_m.id].starred ? '★ Starred' : '☆ Star'"/>
+            </button>
+            <!-- Edit: notes only -->
+            <t t-if="_m.type === 'note'">
+                <button class="sc-action-btn" t-on-click="() => this.scStartEdit(_m.id)">✏️ Edit</button>
+            </t>
+            <!-- Delete: notes only -->
+            <t t-if="_m.type === 'note'">
+                <button class="sc-action-btn sc-btn-danger" t-on-click="() => this.scDeleteMsg(_m.id)">🗑 Delete</button>
+            </t>
+            <!-- Reply All / Forward: emails only -->
+            <t t-if="_m.type === 'email'">
+                <button class="sc-action-btn" t-on-click="() => this.scReplyAll(_m.id)" title="Reply All">
+                    <i class="fa fa-reply"/> Reply
+                </button>
+                <button class="sc-action-btn" t-on-click="() => this.scForward(_m.id)" title="Forward">
+                    <i class="fa fa-share"/> Forward
+                </button>
+            </t>
+            <button class="sc-action-btn" t-on-click="() => this.scCopyLink(_m.id)">🔗 Link</button>
+            <button class="sc-action-btn" t-on-click="(ev) => this.scOpenPicker(_m.id, ev)">😊 React</button>
+        </div>
+
+    </div>
+</t>
+
+</templates>

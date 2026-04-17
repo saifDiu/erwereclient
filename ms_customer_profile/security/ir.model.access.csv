@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_free_webmail_cs,free.webmail.cs,model_ms_customer_free_webmail_domain,group_ms_customer_service,1,0,0,0
+access_free_webmail_admin,free.webmail.admin,model_ms_customer_free_webmail_domain,group_ms_customer_admin,1,1,1,1
+access_country_email_cs,country.email.cs,model_ms_customer_country_email_config,group_ms_customer_service,1,0,0,0
+access_country_email_admin,country.email.admin,model_ms_customer_country_email_config,group_ms_customer_admin,1,1,1,1
+access_block_history_cs,block.history.cs,model_ms_customer_block_history,group_ms_customer_service,1,0,0,0
+access_block_history_admin,block.history.admin,model_ms_customer_block_history,group_ms_customer_admin,1,1,1,1
+access_enquiry_product_cs,enquiry.product.cs,model_ms_customer_enquiry_product,group_ms_customer_service,1,1,1,1
+access_enquiry_product_admin,enquiry.product.admin,model_ms_customer_enquiry_product,group_ms_customer_admin,1,1,1,1
